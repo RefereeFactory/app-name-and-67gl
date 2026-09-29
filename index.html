@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lori — A Bouquet of Flowers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Nunito+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#fbf6f2;
+    --ink:#3a2e34;
+    --muted:#8a7a80;
+    --rose:#d98a9e;
+    --rose-deep:#b85c74;
+    --sage:#8fa987;
+    --sage-deep:#5e7a5a;
+    --cream:#fff9f5;
+    --gold:#c99a5b;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'Nunito Sans',sans-serif;
+    background:
+      radial-gradient(1200px 700px at 80% -10%, #fdeef0 0%, transparent 60%),
+      radial-gradient(1000px 600px at -10% 110%, #eef3ea 0%, transparent 55%),
+      var(--bg);
+    color:var(--ink);
+    line-height:1.7;
+    min-height:100vh;
+  }
+  h1,h2,h3{font-family:'Cormorant Garamond',serif;font-weight:600;line-height:1.2}
+  a{color:var(--rose-deep)}
+
+  /* Header */
+  header{
+    text-align:center;
+    padding:48px 20px 12px;
+  }
+  .brand{
+    font-family:'Cormorant Garamond',serif;
+    font-size:clamp(3.2rem,12vw,6rem);
+    font-weight:500;
+    letter-spacing:.04em;
+    color:var(--rose-deep);
+  }
+  .brand span{color:var(--sage-deep);font-style:italic}
+  .tagline{
+    color:var(--muted);
+    font-size:1.05rem;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    margin-top:6px;
+  }
+
+  /* Hero / bouquet */
+  .stage{
+    display:flex;
+    justify-content:center;
+    padding:20px 16px 40px;
+  }
+  .bouquet-card{
+    background:var(--cream);
+    border-radius:28px;
+    padding:28px 20px 36px;
+    box-shadow:0 30px 70px -30px rgba(184,92,116,.4), 0 4px 14px rgba(0,0,0,.05);
+    max-width:560px;
+    width:100%;
+    text-align:center;
+    position:relative;
+    overflow:hidden;
+  }
+  .bouquet-card::before{
+    content:"";
+    position:absolute;inset:0;
+    background:radial-gradient(400px 300px at 50% 0%, rgba(217,138,158,.10), transparent 70%);
+    pointer-events:none;
+  }
+  svg.bouquet{width:100%;max-width:420px;height:auto;display:block;margin:0 auto;overflow:visible}
+  .caption{
+    font-family:'Cormorant Garamond',serif;
+    font-style:italic;
+    font-size:1.5rem;
+    color:var(--sage-deep);
+    margin-top:14px;
+  }
+  .caption small{
+    display:block;
+    font-family:'Nunito Sans',sans-serif;
+    font-style:normal;
+    font-size:.85rem;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    color:var(--muted);
+    margin-top:6px;
+  }
+
+  /* gentle sway animation */
+  .sway{transform-origin:50% 100%;animation:sway 7s ease-in-out infinite}
+  .sway.b{animation-duration:8.5s;animation-delay:-2s}
+  .sway.c{animation-duration:6s;animation-delay:-1s}
+  @keyframes sway{
+    0%,100%{transform:rotate(-1.6deg)}
+    50%{transform:rotate(1.6deg)}
+  }
+  @media (prefers-reduced-motion:reduce){.sway{animation:none}}
+
+  /* Sections */
+  section.block{
+    max-width:760px;
+    margin:0 auto;
+    padding:36px 22px;
+  }
+  h2{font-size:2.2rem;color:var(--ink);text-align:center;margin-bottom:6px}
+  .lead{text-align:center;color:var(--muted);max-width:560px;margin:0 auto 22px}
+
+  /* Pay area */
+  .pay-wrap{
+    background:var(--cream);
+    border:1px solid #f0e0e4;
+    border-radius:22px;
+    padding:26px 24px;
+    box-shadow:0 18px 40px -28px rgba(184,92,116,.5);
+  }
+  [data-factory-pay]{display:flex;flex-direction:column;gap:12px}
+  .factory-pay-item{
+    display:flex;align-items:center;justify-content:space-between;
+    gap:14px;flex-wrap:wrap;
+    padding:16px 18px;
+    background:#fff;
+    border:1px solid #f2e6ea;
+    border-radius:16px;
+  }
+  .factory-pay-name{font-family:'Cormorant Garamond',serif;font-size:1.4rem;color:var(--ink)}
+  .factory-pay-price{color:var(--rose-deep);font-weight:600;font-size:1.1rem}
+  .factory-pay-btn{
+    background:var(--rose-deep);color:#fff;border:none;
+    padding:12px 26px;border-radius:999px;font-size:1rem;font-weight:600;
+    cursor:pointer;min-height:44px;transition:transform .15s ease,background .2s ease;
+  }
+  .factory-pay-btn:hover{background:#a24d64;transform:translateY(-2px)}
+  .pay-empty{text-align:center;color:var(--muted);font-style:italic}
+
+  .thanks{
+    display:none;
+    margin-top:16px;text-align:center;
+    background:#eef3ea;border:1px solid #d8e4d3;border-radius:14px;
+    padding:14px;color:var(--sage-deep);font-weight:600;
+  }
+  .thanks.show{display:block}
+
+  /* petals list */
+  .meaning{
+    display:grid;grid-template-columns:1fr;gap:14px;margin-top:10px;
+  }
+  .meaning div{
+    background:var(--cream);border-radius:16px;padding:16px 18px;
+    border:1px solid #f0e6e0;
+  }
+  .meaning h3{font-size:1.4rem;color:var(--rose-deep);margin-bottom:2px}
+  .meaning p{color:var(--muted);font-size:.95rem}
+
+  /* How it works */
+  .how{background:#f4ece6;border-radius:20px;padding:24px;margin-top:8px}
+  .how h3{font-size:1.5rem;text-align:center;color:var(--sage-deep);margin-bottom:10px}
+  .how ol{padding-left:20px;color:var(--muted)}
+  .how li{margin-bottom:6px}
+
+  /* Terms modal */
+  .tc-link{
+    display:inline-block;background:none;border:none;color:var(--muted);
+    text-decoration:underline;cursor:pointer;font-size:.95rem;font-family:inherit;
+    min-height:44px;
+  }
+  .overlay{
+    position:fixed;inset:0;background:rgba(58,46,52,.55);
+    display:none;align-items:flex-start;justify-content:center;
+    padding:24px 16px;z-index:50;overflow-y:auto;
+  }
+  .overlay.show{display:flex}
+  .modal{
+    background:var(--cream);border-radius:22px;max-width:640px;width:100%;
+    padding:30px 28px;box-shadow:0 40px 80px -30px rgba(0,0,0,.4);
+    margin:auto;
+  }
+  .modal h2{text-align:left;font-size:2rem}
+  .modal h3{font-size:1.25rem;color:var(--rose-deep);margin-top:18px}
+  .modal p{color:var(--ink);font-size:.95rem;margin-top:6px}
+  .modal .close{
+    background:var(--sage-deep);color:#fff;border:none;border-radius:999px;
+    padding:12px 28px;margin-top:22px;cursor:pointer;font-size:1rem;
+    font-weight:600;min-height:44px;
+  }
+
+  footer{
+    text-align:center;padding:34px 20px 50px;color:var(--muted);
+    font-size:.9rem;
+  }
+  footer .heart{color:var(--rose)}
+</style>
+<script id="factory-store-sdk">
+window.factory=(function(){
+var K="e5291637-9b86-46b0-a81a-2c72b967095b",U="https://canvbkibjgcnqowjtarf.supabase.co/functions/v1/app-market",A="sb_publishable_sMTQKIeFgT1vwjHnU7Gexg_8CCmhtxs";
+function call(b){b.appKey=K;return fetch(U,{method:"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer "+A},body:JSON.stringify(b)}).then(function(r){return r.json().then(function(d){if(!r.ok)throw new Error(d.error||("store "+r.status));return d;});});}
+var S={
+put:function(c,i,d){return call({op:"put",collection:c,id:String(i),data:d}).then(function(x){return x.doc?x.doc.data:null;});},
+get:function(c,i){return call({op:"get",collection:c,id:String(i)}).then(function(x){return x.doc?x.doc.data:null;});},
+list:function(c){return call({op:"list",collection:c}).then(function(x){return x.docs.map(function(d){return d.data;});});},
+remove:function(c,i){return call({op:"delete",collection:c,id:String(i)}).then(function(){return true;});},
+unlock:function(code){return call({op:"redeem",code:String(code)}).then(function(x){try{localStorage.setItem("factory_access",x.status);}catch(e){}return x.status;});},
+access:function(){try{return localStorage.getItem("factory_access")||"none";}catch(e){return "none";}}
+};
+var _c=null;try{var h=(location.hash||"").match(/factory_code=([a-z0-9-]+)/i);_c=h?h[1]:localStorage.getItem("factory_code");if(h){history.replaceState(null,"",location.pathname+location.search);}}catch(e){}
+var F={put:S.put,get:S.get,list:S.list,remove:S.remove,unlock:S.unlock,access:S.access};
+F.ready=_c?S.unlock(_c).then(function(s){try{if(s!=="invalid")localStorage.setItem("factory_code",_c);}catch(e){}return s;}).catch(function(){return S.access();}):Promise.resolve(S.access());
+return F;})();
+</script>
+<script id="factory-pay-sdk">
+(function(){
+var R="app-name-and-67gl",U="https://canvbkibjgcnqowjtarf.supabase.co/functions/v1/app-pay",P=String.fromCharCode(163);
+function call(b){return fetch(U,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(b)}).then(function(r){return r.json().then(function(d){if(!r.ok)throw new Error(d.error||("pay "+r.status));return d;});});}
+function money(p){return P+(Number(p)/100).toFixed(2);}
+function el(t,c,x){var e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=String(x);return e;}
+function say(text,good){var b=document.getElementById("factory-pay-banner");if(!b){b=el("div");b.id="factory-pay-banner";b.setAttribute("role","status");b.style.cssText="position:fixed;left:12px;right:12px;bottom:12px;z-index:2147483000;max-width:520px;margin:0 auto;padding:14px 16px;border-radius:12px;font:600 15px/1.4 system-ui,sans-serif;box-shadow:0 8px 30px rgba(0,0,0,.35);cursor:pointer;";b.onclick=function(){b.remove();};document.body.appendChild(b);}b.style.background=good?"#0f5132":"#332b00";b.style.color="#fff";b.textContent=text;}
+var _p=null;function products(){if(!_p)_p=call({op:"products",repo:R});return _p;}
+function buy(id,btn){if(btn){btn.disabled=true;}return call({op:"checkout",product_id:id,return_url:location.origin+location.pathname}).then(function(d){location.href=d.url;}).catch(function(e){if(btn){btn.disabled=false;}say(e.message||"Payment could not be started. Nothing was taken.",false);});}
+function mount(host){if(!host||host.getAttribute("data-factory-pay-done"))return Promise.resolve();host.setAttribute("data-factory-pay-done","1");var want=(host.getAttribute("data-factory-pay")||"").trim().toLowerCase();
+return products().then(function(d){var list=(d.products||[]).filter(function(x){return !want||String(x.name).trim().toLowerCase()===want;});host.textContent="";
+list.forEach(function(x){var row=el("div","factory-pay-item");row.appendChild(el("span","factory-pay-name",x.name));if(x.description)row.appendChild(el("span","factory-pay-desc",x.description));row.appendChild(el("span","factory-pay-price",money(x.price_pence)));
+if(d.open){var b=el("button","factory-pay-btn","Pay "+money(x.price_pence));b.type="button";b.onclick=function(){buy(x.id,b);};row.appendChild(b);}else{row.appendChild(el("span","factory-pay-soon","Online payment opening soon"));}
+host.appendChild(row);});}).catch(function(){host.textContent="";});}
+function mountAll(){var n=document.querySelectorAll("[data-factory-pay]");for(var i=0;i<n.length;i++)mount(n[i]);}
+function back(){var m=(location.search||"").match(/[?&]paid=([A-Za-z0-9_]+)/);if(!m)return;var v=m[1];try{history.replaceState(null,"",location.pathname+location.hash);}catch(e){}
+if(v==="no"){say("Payment cancelled. Nothing was taken.",false);return;}if(v.indexOf("cs_")!==0)return;var tries=0;
+(function ask(){call({op:"order",session_id:v}).then(function(d){var o=d.order||{};if(o.status==="paid"){say("Paid, thank you: "+o.product_name+" "+money(o.gross_pence),true);try{window.dispatchEvent(new CustomEvent("factory:paid",{detail:{product:o.product_name,amount_pence:o.gross_pence}}));}catch(e){}}
+else if(o.status==="pending"&&++tries<8){setTimeout(ask,2000);}else if(o.status==="pending"){say("Thank you. Your payment is being confirmed.",true);}}).catch(function(){if(++tries<4)setTimeout(ask,2000);});})();}
+var st=document.createElement("style");st.textContent=":where(.factory-pay-item){display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;margin:8px 0}:where(.factory-pay-name){font-weight:600}:where(.factory-pay-desc){flex-basis:100%;opacity:.8;font-size:.92em}:where(.factory-pay-price){margin-left:auto}:where(.factory-pay-btn){cursor:pointer;padding:.6em 1.1em;border-radius:.6em;border:0;font:inherit;font-weight:700}:where(.factory-pay-soon){opacity:.7;font-size:.9em}";document.head.appendChild(st);
+window.factory=window.factory||{};window.factory.pay={products:products,buy:buy,mount:mount};
+function go(){back();mountAll();}if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",go);else go();
+})();
+</script>
+</head>
+<body>
+
+  <header>
+    <div class="brand">Lori<span>.</span></div>
+    <p class="tagline">A bouquet, offered with love</p>
+  </header>
+
+  <main>
+    <div class="stage">
+      <div class="bouquet-card">
+        <svg class="bouquet" viewBox="0 0 400 460" role="img" aria-labelledby="bqTitle bqDesc">
+          <title id="bqTitle">A hand-tied bouquet of flowers</title>
+          <desc id="bqDesc">An illustrated bouquet of roses, blooms and greenery wrapped in soft paper and tied with a ribbon.</desc>
+
+          <!-- Wrapping paper -->
+          <path d="M200 300 L120 460 L280 460 Z" fill="#f6e7d8"/>
+          <path d="M200 300 L150 460 L200 460 Z" fill="#efd9c4"/>
+          <path d="M200 300 L250 460 L200 460 Z" fill="#f9efe4"/>
+
+          <!-- Stems -->
+          <g stroke="#5e7a5a" stroke-width="4" fill="none" stroke-linecap="round">
+            <path d="M200 315 C195 260 175 220 165 175"/>
+            <path d="M200 315 C205 260 225 220 235 175"/>
+            <path d="M200 315 C200 260 200 215 200 165"/>
+            <path d="M200 315 C185 265 150 235 128 200"/>
+            <path d="M200 315 C215 265 250 235 272 200"/>
+          </g>
+
+          <!-- Leaves -->
+          <g class="sway c">
+            <ellipse cx="140" cy="235" rx="26" ry="12" fill="#8fa987" transform="rotate(-38 140 235)"/>
+            <ellipse cx="262" cy="235" rx="26" ry="12" fill="#7d9a76" transform="rotate(38 262 235)"/>
+            <ellipse cx="170" cy="270" rx="22" ry="10" fill="#a2b89a" transform="rotate(-25 170 270)"/>
+            <ellipse cx="232" cy="270" rx="22" ry="10" fill="#94ad8c" transform="rotate(25 232 270)"/>
+          </g>
+
+          <!-- Flower factory via reuse -->
+          <defs>
+            <g id="rose">
+              <circle r="30" fill="#d98a9e"/>
+              <path d="M0 -22 A22 22 0 0 1 20 12 A22 22 0 0 1 -20 12 A22 22 0 0 1 0 -22" fill="#c56d84" opacity=".55"/>
+              <circle r="14" fill="#b85c74"/>
+              <circle r="6" fill="#e6a8b8"/>
+            </g>
+            <g id="daisy">
+              <g fill="#fff9f5">
+                <ellipse rx="8" ry="18" cy="-16"/>
+                <ellipse rx="8" ry="18" cy="16"/>
+                <ellipse rx="8" ry="18" cx="-16" transform="rotate(90)"/>
+                <ellipse rx="8" ry="18" cx="16" transform="rotate(90)"/>
+                <ellipse rx="8" ry="18" transform="rotate(45)" cy="-16"/>
+                <ellipse rx="8" ry="18" transform="rotate(45)" cy="16"/>
+                <ellipse rx="8" ry="18" transform="rotate(-45)" cy="-16"/>
+                <ellipse rx="8" ry="18" transform="rotate(-45)" cy="16"/>
+              </g>
+              <circle r="10" fill="#c99a5b"/>
+            </g>
+            <g id="tulip">
+              <path d="M0 -26 C18 -22 20 6 0 16 C-20 6 -18 -22 0 -26" fill="#e89bb0"/>
+              <path d="M0 -20 C6 -10 6 8 0 14 C-6 8 -6 -10 0 -20" fill="#cf7690"/>
+            </g>
+          </defs>
+
+          <!-- back blooms -->
+          <g class="sway b">
+            <use href="#daisy" transform="translate(128 200) scale(0.9)"/>
+            <use href="#daisy" transform="translate(272 200) scale(0.9)"/>
+          </g>
+          <!-- mid blooms -->
+          <g class="sway">
+            <use href="#tulip" transform="translate(165 175) scale(1.05)"/>
+            <use href="#tulip" transform="translate(235 175) scale(1.05)"/>
+          </g>
+          <!-- front roses -->
+          <g class="sway c">
+            <use href="#rose" transform="translate(200 168)"/>
+            <use href="#rose" transform="translate(158 200) scale(0.85)"/>
+            <use href="#rose" transform="translate(244 200) scale(0.85)"/>
+          </g>
+
+          <!-- Ribbon -->
+          <g>
+            <rect x="176" y="300" width="48" height="26" rx="6" fill="#b85c74"/>
+            <path d="M200 313 C180 300 165 305 160 326 C182 322 196 322 200 313" fill="#d98a9e"/>
+            <path d="M200 313 C220 300 235 305 240 326 C218 322 204 322 200 313" fill="#d98a9e"/>
+            <circle cx="200" cy="313" r="7" fill="#a24d64"/>
+          </g>
+        </svg>
+
+        <p class="caption">“For you, gathered gently.”
+          <small>Roses · Tulips · Daisies · Sage</small>
+        </p>
+      </div>
+    </div>
+
+    <section class="block">
+      <h2>Petals with meaning</h2>
+      <p class="lead">Every stem in Lori's little bouquet carries a quiet wish.</p>
+      <div class="meaning">
+        <div><h3>Rose</h3><p>Deep affection and warmth — the classic way to say “I hold you dear.”</p></div>
+        <div><h3>Tulip</h3><p>A fresh start and honest hope for brighter days ahead.</p></div>
+        <div><h3>Daisy</h3><p>Innocence, cheer and gentle new beginnings.</p></div>
+        <div><h3>Sage & greenery</h3><p>Calm, healing and steady friendship holding it all together.</p></div>
+      </div>
+    </section>
+
+    <section class="block">
+      <h2>Take Lori with you</h2>
+      <p class="lead">Love the bouquet? You can support Lori and keep this little bloom close.</p>
+      <div class="pay-wrap">
+        <div data-factory-pay>
+          <p class="pay-empty">The bouquet will be available here soon. 🌸</p>
+        </div>
+        <div class="thanks" id="thanks">Thank you — your bouquet of love has bloomed. 🌷</div>
+      </div>
+    </section>
+
+    <section class="block">
+      <div class="how">
+        <h3>How it works</h3>
+        <ol>
+          <li>Lori shows one hand-drawn bouquet, gently swaying, for you to enjoy any time.</li>
+          <li>Read the meaning behind each flower below the bouquet.</li>
+          <li>If you'd like to support Lori, use the Pay button — the price and secure checkout are handled by The Factory. This app never sees your card details.</li>
+          <li>After paying, you'll return here and see a thank-you note bloom on screen.</li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="block" style="text-align:center;padding-top:0">
+      <button class="tc-link" id="openTC">Read the Terms &amp; Conditions</button>
+    </section>
+  </main>
+
+  <footer>
+    Made with <span class="heart" aria-label="love">❤</span> · Lori — a bouquet of flowers<br>
+    One humanity, one small bloom shared between us.
+  </footer>
+
+  <!-- Terms modal -->
+  <div class="overlay" id="tcOverlay" role="dialog" aria-modal="true" aria-labelledby="tcTitle">
+    <div class="modal">
+      <h2 id="tcTitle">Terms &amp; Conditions</h2>
+      <p>Welcome to Lori. By using this app you agree to these simple, friendly terms.</p>
+
+      <h3>1. What Lori is</h3>
+      <p>Lori is a digital artwork — a bouquet of flowers displayed on screen for your enjoyment. It is offered as a gentle, decorative experience.</p>
+
+      <h3>2. Purchases</h3>
+      <p>You may choose to support Lori through a one-off payment. All payments are processed securely by The Factory's payment service. This app never collects, stores or sees your card or bank details. Prices shown at checkout are final and set by the owner.</p>
+
+      <h3>3. Refunds</h3>
+      <p>As Lori is a digital item delivered immediately, refund requests are handled at the owner's discretion. If something went wrong, please get in touch at [ADD YOUR CONTACT EMAIL].</p>
+
+      <h3>4. Acceptable use</h3>
+      <p>Please use Lori kindly and lawfully. You may not copy, resell or redistribute the artwork as your own without permission.</p>
+
+      <h3>5. Privacy</h3>
+      <p>Lori does not require an account and does not collect personal information beyond what is strictly needed for a payment, which is handled by The Factory. Your visit stays your own.</p>
+
+      <h3>6. No guarantees</h3>
+      <p>Lori is provided “as is”, purely to bring a moment of calm and beauty. We can't promise it will be available without interruption.</p>
+
+      <h3>7. Contact</h3>
+      <p>Questions about these terms? Reach the owner at [ADD YOUR CONTACT EMAIL] or [ADD YOUR PHONE NUMBER].</p>
+
+      <button class="close" id="closeTC">Close</button>
+    </div>
+  </div>
+
+<script>
+  // Terms modal
+  const overlay = document.getElementById('tcOverlay');
+  document.getElementById('openTC').addEventListener('click', ()=>{overlay.classList.add('show');});
+  document.getElementById('closeTC').addEventListener('click', ()=>{overlay.classList.remove('show');});
+  overlay.addEventListener('click', e=>{ if(e.target===overlay) overlay.classList.remove('show'); });
+  document.addEventListener('keydown', e=>{ if(e.key==='Escape') overlay.classList.remove('show'); });
+
+  // React to a successful payment (courtesy on-screen signal)
+  window.addEventListener('factory:paid', function(e){
+    const t = document.getElementById('thanks');
+    t.classList.add('show');
+    t.scrollIntoView({behavior:'smooth', block:'center'});
+  });
+</script>
+<div id="factory-provenance" style="padding:14px 16px;text-align:center;font:11px/1.7 system-ui,sans-serif;color:#888;opacity:.85;">&#9874; Built with <a href="https://thefactory.refereeinnovations.com" style="color:#888;">The Factory</a> using third-party AI tools &#183; the app owner is responsible for its content &#183; Standard: UK law, aligned with the UN Universal Declaration of Human Rights &#183; <a href="https://thefactory.refereeinnovations.com/terms.html" style="color:#888;">Terms</a></div>
+</body>
+</html>
